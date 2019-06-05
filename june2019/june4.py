@@ -42,12 +42,11 @@ The name of a directory or sub-directory will not contain a period.
 
 def find_longest_file_path_length(s):
     longest_file_path_length = 0
-    file_list = []
     root_indics = s.find('\n\t')
     if root_indics == -1:
         return longest_file_path_length
     else:
-        root_dir = s[:root_indics]
+        root_dir_length = len(s[:root_indics])
         s = s[root_indics:]
 
     dot_indics = s.find('.')
@@ -60,23 +59,16 @@ def find_longest_file_path_length(s):
         else:
             file_path = s
             dot_indics = -1
-        file_list.append(file_path)
-    for i in range(len(file_list)):
-        file_path_length = len(root_dir + find_file_path(file_list[i]))
+        file_path = file_path.replace('\n\t', '/')
+        while file_path.startswith('/\t'):
+            file_path = file_path[file_path.find('/', 1):]
+        file_path = file_path.replace('\t', '')
+        print(file_path)
+        file_path_length = len(file_path)
         if file_path_length > longest_file_path_length:
             longest_file_path_length = file_path_length
-    return longest_file_path_length
 
-def find_file_path(s):
-    """s in the format like: \n\t\tsubsubdir1\n\tsubdir2\n\t\tsubsubdir2\n\t\t\tfile2.ext """
-    last_t_indics = s.rfind('\t')
-    file_name = s[last_t_indics+1:]
-    s = s[:last_t_indics+1]
-    s = s.replace('\n\t', '/')
-    while s.startswith('/\t'):
-        s = s[s.find('/', 1):]
-    s = s.replace('\t', '')
-    return s + file_name
+    return longest_file_path_length + root_dir_length
 
 s = 'dir\n\tsubdir1\n\t\tfile1.ext\n\t\tsubsubdir1\n\tsubdir2\n\t\tsubsubdir2\n\t\t\tfile2.ext'
 print(find_longest_file_path_length(s))
