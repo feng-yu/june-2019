@@ -40,7 +40,7 @@ def power_set1(s):
 
     s_result = set()
     for e in result:
-        s_result.add(frozenset(e))
+        s_result.add(frozenset(e))  #does NOT suport set of sets, since set is mutable and doesn't have hashkey
     return s_result
 
 
